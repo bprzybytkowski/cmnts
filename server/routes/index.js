@@ -8,7 +8,7 @@ router.use(bodyParser.json());
 function initRouter(db) {
     comments.initComments(db);
 
-    router.get('/comments', comments.getComments)
+    router.get('/posts/:postId/comments', comments.getComments)
     router.get('/comments/:id', comments.getComment)
     router.post('/comments', comments.createComment)
     router.put('/comments/:id', comments.editComment)

@@ -1,9 +1,10 @@
 const Joi = require('joi')
 
 function initComments(db) {
-    this.getComments = async (_req, res, _next) => {
+
+    this.getComments = async (req, res, _next) => {
         try {
-            let results = await db.all();
+            let results = await db.all(req.params.postId);
             res.json(results);
         } catch (e) {
             console.log(e);
@@ -47,6 +48,7 @@ function initComments(db) {
 
         if (validationResult.error) {
             res.status(400).send(validationResult.error);
+            return;
         }
 
 
@@ -72,6 +74,7 @@ function initComments(db) {
 
         if (paramValidationResult.error || bodyValidationResult.error) {
             res.status(400).send(paramValidationResult.error || bodyValidationResult.error);
+            return;
         }
 
         try {

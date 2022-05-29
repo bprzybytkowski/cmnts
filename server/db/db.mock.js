@@ -45,43 +45,4 @@ mockedDb.one = (id) => {
         }
 }
 
-mockedDb.create = (parent_id, post_id, user_id, content) => {
-    return new Promise((resolve, reject) => {
-        pool.query(`INSERT INTO comments
-        (parent_id, post_id, user_id, content)
-        VALUES (?, ?, ?, ?)`,
-            [parent_id, post_id, user_id, content], (err, result) => {
-                if (err) {
-                    return reject(err);
-                }
-                return resolve(result);
-            })
-    })
-}
-
-mockedDb.update = (id, content) => {
-    return new Promise((resolve, reject) => {
-        pool.query(`UPDATE comments
-        SET content = ?
-        WHERE id = ?`, [content, id], (err, result) => {
-            if (err) {
-                return reject(err);
-            }
-            return resolve(result);
-        })
-    })
-}
-
-mockedDb.delete = (id) => {
-    return new Promise((resolve, reject) => {
-        pool.query(`DELETE from comments
-        WHERE id = ?`, [id], (err, result) => {
-            if (err) {
-                return reject(err);
-            }
-            return resolve(result);
-        })
-    })
-}
-
 module.exports = mockedDb;

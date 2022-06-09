@@ -13,6 +13,7 @@ function initRouter(db) {
     router.post('/comments', comments.createComment)
     router.put('/comments/:id', comments.editComment)
     router.delete('/comments/:id', comments.deleteComment)
+    router.get('/users/:id', comments.getUser)
 
     return router;
 }

@@ -95,6 +95,30 @@ function initComments(db) {
             res.sendStatus(500);
         }
     }
+
+    this.getUser = async (req, res, _next) => {
+        const schema = Joi.object({
+            id: Joi.number()
+        })
+
+        const validationResult = schema.validate(req.params)
+
+        if (validationResult.error) {
+            res.status(400).send(validationResult.error);
+            return;
+        }
+
+        try {
+            let result = await db.getUser(req.params.id);
+            if (!result) {
+                res.sendStatus(404);
+            }
+            res.json(result);
+        } catch (e) {
+            console.log(e);
+            res.sendStatus(500);
+        }
+    }
 }
 
 module.exports = {

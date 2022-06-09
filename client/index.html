@@ -5,20 +5,58 @@
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
 
     <title>Discussion</title>
 </head>
 
 <body>
-    <section id="post">
-        <h2>Post title</h2>
-        <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Tempore ullam placeat ad quos odio aperiam magnam, animi iusto numquam tenetur necessitatibus, sapiente sunt iste quae, dolorum corporis perferendis sit veniam.</p>
-    </section>
-    <textarea id="comment" placeholder="What are your thoughts?"></textarea>
-    <button id="addComment">Submit</button>
-    <section id="allComments"></section>
+    <header class="container">
+        <div>
+            <h2>Post title</h2>
+            <small>Post author</small>
+        </div>
+    </header>
+    <article>
+        <div class="container post-section">
+            <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla et suscipit nisi. Pellentesque habitant
+                morbi tristique senectus et netus et malesuada fames ac turpis egestas. Duis sollicitudin ligula in nisl
+                ultricies, nec accumsan leo posuere. Quisque nec purus at diam aliquet maximus nec eu quam. Suspendisse
+                commodo risus sit amet eros condimentum feugiat. Pellentesque tincidunt ex tortor, a dapibus sapien
+                molestie eget. Suspendisse potenti. Aenean finibus enim nec ante vestibulum, vel pellentesque quam
+                interdum.
+                <br><br>
+                Aliquam pretium auctor nibh id molestie. Nullam sed diam augue. Donec vitae fringilla sem. Aliquam vitae
+                odio venenatis, tempor turpis sit amet, hendrerit mi. Lorem ipsum dolor sit amet, consectetur adipiscing
+                elit. Ut in porta dui. Integer lectus odio, imperdiet ut suscipit et, vehicula vitae est. Sed eu
+                pulvinar leo. Vestibulum aliquam dui quis eleifend bibendum. Maecenas nec malesuada enim. Mauris sit
+                amet dolor metus. Nulla aliquet tortor quis magna condimentum, sit amet aliquam velit fringilla.
+                Vestibulum ante ipsum primis in faucibus orci luctus et ultrices posuere cubilia curae; Proin a mattis
+                ipsum.
+                <br><br>
+                Vestibulum nisl ex, aliquet a diam sed, rhoncus consequat ligula. Nulla facilisi. Nullam quis nibh
+                placerat, semper elit a, scelerisque neque. Fusce quis sagittis justo. Fusce velit risus, luctus tempus
+                ultricies et, posuere et arcu. Phasellus a maximus mi. Vestibulum accumsan massa eu nibh commodo, quis
+                consectetur metus gravida. Aliquam erat volutpat. Vivamus vitae placerat nisi. Nullam ultricies sagittis
+                lectus nec faucibus. Cras velit nulla, dapibus quis ex quis, feugiat feugiat augue.
+            </p>
+        </div>
+    </article>
 
-    <script src="script.js"></script>
+    <div class="container comments-section">
+        <div class="comment-create">
+            <h3>Discussion</h3>
+            <div class="comment-create-component">
+                <img class="current-user-avatar">
+                <input class="comment-content" placeholder="What are your thoughts?"></input>
+                <button class="comment-add">Comment</button>
+            </div>
+        </div>
+        <div class="comments-thread"></div>
+    </div>
+</body>
+
+<script src="script.js"></script>
 </body>
 
 </html>

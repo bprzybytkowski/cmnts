@@ -6,7 +6,8 @@ const pool = mysql.createPool({
     password: process.env.DB_PASSWORD,
     database: process.env.DB_NAME,
     host: process.env.DB_HOST,
-    port: process.env.DB_PORT
+    port: process.env.DB_PORT,
+    dateStrings: true
 });
 
 let cmntsDb = {};
@@ -71,6 +72,17 @@ cmntsDb.delete = (id) => {
                 return reject(err);
             }
             return resolve(result);
+        })
+    })
+}
+
+cmntsDb.getUser = (userId) => {
+    return new Promise((resolve, reject) => {
+        pool.query(`SELECT * FROM users WHERE id = ?`, [userId], (err, results) => {
+            if (err) {
+                return reject(err);
+            }
+            return resolve(results[0]);
         })
     })
 }

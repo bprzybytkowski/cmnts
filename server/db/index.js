@@ -14,7 +14,7 @@ let cmntsDb = {};
 
 cmntsDb.all = (postId) => {
     return new Promise((resolve, reject) => {
-        pool.query(`SELECT c.rating, c.content, c.timestamp, u.name, u.avatar_url
+        pool.query(`SELECT c.id, c.content, c.timestamp, u.name, u.avatar_url
         FROM comments c 
         JOIN users u on c.user_id=u.id
         WHERE c.post_id = ?`, [postId], (err, results) => {
@@ -36,6 +36,19 @@ cmntsDb.one = (id) => {
         })
     })
 }
+
+cmntsDb.upvoters = (id) => {
+    return new Promise((resolve, reject) => {
+        pool.query(`SELECT up.user_id
+        FROM upvotes up
+        WHERE comment_id = ?`, [id], (err, results) => {
+            if (err) {
+                return reject(err);
+            }
+            return resolve(results);
+        })
+    })
+};
 
 cmntsDb.create = (parent_id, post_id, user_id, content) => {
     return new Promise((resolve, reject) => {

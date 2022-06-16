@@ -97,3 +97,7 @@ button:active {
 .timestamp {
     display: inline;
 }
+
+.rating > * {
+    float: left;
+}

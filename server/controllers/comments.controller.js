@@ -36,6 +36,16 @@ function initComments(db) {
         }
     }
 
+    this.getUpvoters = async (req, res, _next) => {
+        try {
+            let results = await db.upvoters(req.params.id);
+            res.json(results);
+        } catch (e) {
+            console.log(e);
+            res.sendStatus(500);
+        }
+    }
+
     this.createComment = async (req, res, _next) => {
         const schema = Joi.object({
             parent_id: Joi.number(),

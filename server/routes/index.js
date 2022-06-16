@@ -8,12 +8,13 @@ router.use(bodyParser.json());
 function initRouter(db) {
     comments.initComments(db);
 
-    router.get('/posts/:postId/comments', comments.getComments)
-    router.get('/comments/:id', comments.getComment)
-    router.post('/comments', comments.createComment)
-    router.put('/comments/:id', comments.editComment)
-    router.delete('/comments/:id', comments.deleteComment)
-    router.get('/users/:id', comments.getUser)
+    router.get('/posts/:postId/comments', comments.getComments);
+    router.get('/comments/:id', comments.getComment);
+    router.get('/comments/:id/upvoters', comments.getUpvoters);
+    router.post('/comments', comments.createComment);
+    router.put('/comments/:id', comments.editComment);
+    router.delete('/comments/:id', comments.deleteComment);
+    router.get('/users/:id', comments.getUser);
 
     return router;
 }

@@ -83,7 +83,7 @@ button:active {
 }
 
 .comment-single {
-    padding-top: 1em;
+    padding-top: 1.5em;
     height: 5em;
 }
 
@@ -91,13 +91,37 @@ button:active {
     height: 60%;
     float: left;
     margin-right: 1em;
+    margin-bottom: 1em;
 }
+
+.comment-header {
+    margin-bottom: .5em;
+}
+
+.timestamp {
+    opacity: .5;
+}
+
 
 .username,
 .timestamp {
     display: inline;
 }
 
+.content {
+    margin-bottom: 0.5em;
+}
+
 .rating > * {
     float: left;
+}
+
+.upvote:hover,
+.upvote:focus,
+.upvote:active {
+    cursor: pointer;
+}
+
+.disabled {
+    opacity: .3;
 }

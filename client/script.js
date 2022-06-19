@@ -34,58 +34,100 @@ const postComment = async () => {
     content.value = '';
 };
 
-btn.addEventListener('click', postComment)
+btn.addEventListener('click', postComment);
 let commentsSection = document.querySelector('.comments-thread');
 
 const fetchComments = async () => {
-    const responsePromise = await fetch(`http://localhost:3000/api/posts/${postId}/comments`);
-    const response = await responsePromise.json();
+    commentsSection.innerHTML = '';
+    const commentsPromise = await fetch(`http://localhost:3000/api/posts/${postId}/comments`);
+    const comments = await commentsPromise.json();
 
-    for (const comment of response) {
-        let commentDiv = document.createElement('div');
-        commentDiv.classList.add('comment-single');
-
-        let avatarImg = document.createElement('img');
-        let commentHeader = document.createElement('div');
-        commentHeader.classList.add('comment-header');
-        let usernameDiv = document.createElement('div');
-        usernameDiv.classList.add('username');
-        let timestampDiv = document.createElement('div');
-        timestampDiv.classList.add('timestamp');
-        let commentContent = document.createElement('div');
-        commentContent.classList.add('content');
-        let ratingDiv = document.createElement('div');
-        ratingDiv.classList.add('rating');
-        let scoreDiv = document.createElement('div');
-        scoreDiv.classList.add('score');
-        let upvoteDiv = document.createElement('div');
-        upvoteDiv.classList.add('upvote');
-
-        avatarImg.src = comment.avatar_url;
-        usernameDiv.appendChild(document.createTextNode(comment.name + ' • '));
-        timestampDiv.appendChild(document.createTextNode(timeSince(comment.timestamp)));
-        commentHeader.appendChild(usernameDiv);
-        commentHeader.appendChild(timestampDiv);
-        commentContent.appendChild(document.createTextNode(comment.content));
-
-        const upvoters = await fetchUpvoters(comment.id);
-
-        scoreDiv.appendChild(document.createTextNode(upvoters.length));
-
-        upvoteDiv.appendChild(document.createTextNode(' Upvote'));
-
-        commentDiv.appendChild(avatarImg);
-        commentDiv.appendChild(commentHeader);
-        commentDiv.appendChild(commentContent);
-        ratingDiv.appendChild(scoreDiv);
-        ratingDiv.appendChild(upvoteDiv);
-        commentDiv.appendChild(ratingDiv);
+    for (const comment of comments) {
+        const commentDiv = await buildCommentDiv(comment);
         commentsSection.appendChild(commentDiv);
     }
 };
 
+const fetchComment = async commentId => {
+    const commentPromise = await fetch(`http://localhost:3000/api/comments/${commentId}`);
+    const comment = await commentPromise.json();
+    const commentDiv = await buildCommentDiv(comment);
 
-async function fetchUpvoters(commentId) {
+    document.querySelector(`#comment-${commentId}`).replaceWith(commentDiv);
+}
+
+const buildCommentDiv = async comment => {
+    let commentDiv = document.createElement('div');
+    commentDiv.classList.add('comment-single');
+    commentDiv.id = `comment-${comment.id}`;
+
+    let avatarImg = document.createElement('img');
+    let commentHeader = document.createElement('div');
+    commentHeader.classList.add('comment-header');
+    let usernameDiv = document.createElement('div');
+    usernameDiv.classList.add('username');
+    let timestampDiv = document.createElement('div');
+    timestampDiv.classList.add('timestamp');
+    let commentContent = document.createElement('div');
+    commentContent.classList.add('content');
+    let ratingDiv = document.createElement('div');
+    ratingDiv.classList.add('rating');
+    let scoreDiv = document.createElement('div');
+    scoreDiv.classList.add('score');
+    let upvoteDiv = document.createElement('div');
+    upvoteDiv.classList.add('upvote');
+
+    function handleUpvote() {
+        upvote(comment.id);
+    }
+
+    upvoteDiv.addEventListener('click', handleUpvote);
+
+    avatarImg.src = comment.avatar_url;
+    usernameDiv.appendChild(document.createTextNode(comment.author_name + ' • '));
+    timestampDiv.appendChild(document.createTextNode(timeSince(comment.timestamp)));
+    commentHeader.appendChild(usernameDiv);
+    commentHeader.appendChild(timestampDiv);
+    commentContent.appendChild(document.createTextNode(comment.content));
+
+    const upvoters = await fetchUpvoters(comment.id);
+
+    scoreDiv.appendChild(document.createTextNode(upvoters.length));
+
+    upvoteDiv.appendChild(document.createTextNode('▲'));
+    // disable self or multiple voting
+    if (currentUserId === comment.author_id ||
+        upvoters.some(upvoter => upvoter.user_id === currentUserId)) {
+            upvoteDiv.classList.add('disabled');
+            upvoteDiv.removeEventListener('click', handleUpvote);
+        }
+
+    commentDiv.appendChild(avatarImg);
+    commentDiv.appendChild(commentHeader);
+    commentDiv.appendChild(commentContent);
+    ratingDiv.appendChild(scoreDiv);
+    ratingDiv.appendChild(upvoteDiv);
+    commentDiv.appendChild(ratingDiv);
+    return commentDiv;
+}
+
+
+const upvote = async commentId => {
+    const body = {
+        'user_id': currentUserId,
+    };
+    await fetch(`http://localhost:3000/api/comments/${commentId}/upvote`, {
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body),
+    });
+
+    fetchComment(commentId);
+}
+
+const fetchUpvoters = async commentId => {
     const response = await fetch(`http://localhost:3000/api/comments/${commentId}/upvoters`);
     return response.json();
 }

@@ -14,7 +14,7 @@ let cmntsDb = {};
 
 cmntsDb.all = (postId) => {
     return new Promise((resolve, reject) => {
-        pool.query(`SELECT c.id, c.content, c.timestamp, u.name, u.avatar_url
+        pool.query(`SELECT c.id, c.content, c.timestamp, u.id author_id, u.name author_name, u.avatar_url
         FROM comments c 
         JOIN users u on c.user_id=u.id
         WHERE c.post_id = ?`, [postId], (err, results) => {
@@ -28,7 +28,10 @@ cmntsDb.all = (postId) => {
 
 cmntsDb.one = (id) => {
     return new Promise((resolve, reject) => {
-        pool.query(`SELECT * FROM comments WHERE id = ?`, [id], (err, results) => {
+        pool.query(`SELECT c.id, c.content, c.timestamp, u.id author_id, u.name author_name, u.avatar_url
+        FROM comments c
+        JOIN users u on c.user_id=u.id
+        WHERE c.id = ?`, [id], (err, results) => {
             if (err) {
                 return reject(err);
             }
@@ -37,16 +40,31 @@ cmntsDb.one = (id) => {
     })
 }
 
-cmntsDb.upvoters = (id) => {
+cmntsDb.getUpvoters = (commentId) => {
     return new Promise((resolve, reject) => {
         pool.query(`SELECT up.user_id
         FROM upvotes up
-        WHERE comment_id = ?`, [id], (err, results) => {
+        WHERE comment_id = ?`, [commentId], (err, results) => {
             if (err) {
                 return reject(err);
             }
             return resolve(results);
         })
+    })
+};
+
+cmntsDb.upvote = (commentId, userId) => {
+    return new Promise((resolve, reject) => {
+        pool.query(`INSERT INTO upvotes (comment_id, user_id)
+        SELECT ?, ?
+        WHERE NOT EXISTS
+        (SELECT * FROM upvotes WHERE comment_id = ? AND user_id = ?)`,
+            [commentId, userId, commentId, userId], (err, results) => {
+                if (err) {
+                    return reject(err);
+                }
+                return resolve(results);
+            })
     })
 };
 

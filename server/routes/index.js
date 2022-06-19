@@ -11,6 +11,7 @@ function initRouter(db) {
     router.get('/posts/:postId/comments', comments.getComments);
     router.get('/comments/:id', comments.getComment);
     router.get('/comments/:id/upvoters', comments.getUpvoters);
+    router.post('/comments/:id/upvote', comments.upvote);
     router.post('/comments', comments.createComment);
     router.put('/comments/:id', comments.editComment);
     router.delete('/comments/:id', comments.deleteComment);

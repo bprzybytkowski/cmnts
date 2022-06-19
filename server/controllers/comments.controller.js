@@ -2,7 +2,7 @@ const Joi = require('joi')
 
 function initComments(db) {
 
-    this.getComments = async (req, res, _next) => {
+    this.getComments = async (req, res) => {
         try {
             let results = await db.all(req.params.postId);
             res.json(results);
@@ -12,7 +12,7 @@ function initComments(db) {
         }
     }
 
-    this.getComment = async (req, res, _next) => {
+    this.getComment = async (req, res) => {
         const schema = Joi.object({
             id: Joi.number()
         })
@@ -36,9 +36,9 @@ function initComments(db) {
         }
     }
 
-    this.getUpvoters = async (req, res, _next) => {
+    this.getUpvoters = async (req, res) => {
         try {
-            let results = await db.upvoters(req.params.id);
+            let results = await db.getUpvoters(req.params.id);
             res.json(results);
         } catch (e) {
             console.log(e);
@@ -46,7 +46,17 @@ function initComments(db) {
         }
     }
 
-    this.createComment = async (req, res, _next) => {
+    this.upvote = async (req, res) => {
+        try {
+            let result = await db.upvote(req.params.id, req.body.user_id);
+            res.json(result);
+        } catch (e) {
+            console.log(e);
+            res.sendStatus(500);
+        }
+    }
+
+    this.createComment = async (req, res) => {
         const schema = Joi.object({
             parent_id: Joi.number(),
             post_id: Joi.number().required(),
@@ -71,7 +81,7 @@ function initComments(db) {
         }
     }
 
-    this.editComment = async (req, res, _next) => {
+    this.editComment = async (req, res) => {
         const paramsSchema = Joi.object({
             id: Joi.number().required()
         })
@@ -96,7 +106,7 @@ function initComments(db) {
         }
     }
 
-    this.deleteComment = async (req, res, _next) => {
+    this.deleteComment = async (req, res) => {
         try {
             let result = await db.delete(req.params.id);
             res.json(result);
@@ -106,7 +116,7 @@ function initComments(db) {
         }
     }
 
-    this.getUser = async (req, res, _next) => {
+    this.getUser = async (req, res) => {
         const schema = Joi.object({
             id: Joi.number()
         })

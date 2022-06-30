@@ -5,9 +5,10 @@ const generateUserId = () => Math.floor(Math.random() * 7 + 1);
 
 let currentUserId = generateUserId();
 const avatarImg = document.querySelector('.current-user-avatar');
+const hostname = window.location.hostname;
 
 const getUserAvatar = async () => {
-    await fetch(`http://localhost:3000/api/users/${currentUserId}`)
+    await fetch(`http://${hostname}:3000/api/users/${currentUserId}`)
         .then(response => response.json())
         .then((user) => {
             avatarImg.src = user.avatar_url
@@ -21,7 +22,7 @@ const postComment = async () => {
         'user_id': currentUserId,
         'content': content.value
     };
-    await fetch('http://localhost:3000/api/comments', {
+    await fetch(`http://${hostname}:3000/api/comments`, {
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -39,7 +40,7 @@ let commentsSection = document.querySelector('.comments-thread');
 
 const fetchComments = async () => {
     commentsSection.innerHTML = '';
-    const commentsPromise = await fetch(`http://localhost:3000/api/posts/${postId}/comments`);
+    const commentsPromise = await fetch(`http://${hostname}:3000/api/posts/${postId}/comments`);
     const comments = await commentsPromise.json();
 
     for (const comment of comments) {
@@ -49,7 +50,7 @@ const fetchComments = async () => {
 };
 
 const fetchComment = async commentId => {
-    const commentPromise = await fetch(`http://localhost:3000/api/comments/${commentId}`);
+    const commentPromise = await fetch(`http://${hostname}:3000/api/comments/${commentId}`);
     const comment = await commentPromise.json();
     const commentDiv = await buildCommentDiv(comment);
 
@@ -116,7 +117,7 @@ const upvote = async commentId => {
     const body = {
         'user_id': currentUserId,
     };
-    await fetch(`http://localhost:3000/api/comments/${commentId}/upvote`, {
+    await fetch(`http://${hostname}:3000/api/comments/${commentId}/upvote`, {
         method: 'post',
         headers: {
             'Content-Type': 'application/json'
@@ -128,7 +129,7 @@ const upvote = async commentId => {
 }
 
 const fetchUpvoters = async commentId => {
-    const response = await fetch(`http://localhost:3000/api/comments/${commentId}/upvoters`);
+    const response = await fetch(`http://${hostname}:3000/api/comments/${commentId}/upvoters`);
     return response.json();
 }
 

@@ -4,8 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "dev": "env-cmd -f ./config/dev.env npx nodemon server/server.js -w server",
-    "prod": "env-cmd -f ./config/prod.env npx node server/server.js -w server",
+    "dev": "env-cmd -f ./config/.env npx nodemon server/server.js -w server",
+    "prod": "env-cmd -f ./config/.env npx node server/server.js -w server",
     "test": "jest",
     "test:watch": "jest --watch"
   },
